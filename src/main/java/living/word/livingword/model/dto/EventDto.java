@@ -14,6 +14,10 @@ public class EventDto {
     private String title;
     private String description;
     private String imageUrl;
+    private String location;
     private LocalDateTime eventDate;
-    private String createdByUsername;
+    private Long addedById;
+    private String createdByUsername; 
+    private String createdByLastname;
+    private String createdByMinistry;
 }

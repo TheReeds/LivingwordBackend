@@ -3,7 +3,6 @@ package living.word.livingword.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +22,7 @@ public class User implements UserDetails { // Implementar UserDetails
 
     private String name;
     private String lastname;
+    private String photoUrl;
 
     @Column(unique=true, nullable=false)
     private String email;
@@ -97,5 +97,12 @@ public class User implements UserDetails { // Implementar UserDetails
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

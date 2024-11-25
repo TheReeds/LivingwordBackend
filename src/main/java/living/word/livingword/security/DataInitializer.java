@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -30,6 +31,10 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Admin permissions
         Permission adminPermission = createPermissionIfNotExists("ADMIN_ACCESS");
+        Permission readUser = createPermissionIfNotExists("USER_READ");
+        Permission writeUser = createPermissionIfNotExists("USER_WRITE");
+        Permission editUser = createPermissionIfNotExists("USER_EDIT");
+        Permission deleteUser = createPermissionIfNotExists("USER_DELETE");
         /* General Permissions
         - Permissions NewsLetters*/
         Permission readNewsletter = createPermissionIfNotExists("NEWSLETTER_READ");
@@ -61,6 +66,7 @@ public class DataInitializer implements CommandLineRunner {
         Permission writeMinistry = createPermissionIfNotExists("MINISTRY_WRITE");
         Permission editMinistry = createPermissionIfNotExists("MINISTRY_EDIT");
         Permission deleteMinistry = createPermissionIfNotExists("MINISTRY_DELETE");
+        Permission assignateMinistry = createPermissionIfNotExists("MINISTRY_ASSIGNATE");
         // Register permissions
         Permission registerPermission = createPermissionIfNotExists("REGISTER_ACCESS");
         // Contact permissions
@@ -80,11 +86,16 @@ public class DataInitializer implements CommandLineRunner {
         Permission deleteSermonNote = createPermissionIfNotExists("SERMONNOTE_DELETE");
 
         // Crear rol USER con permisos de lectura
-        createRoleIfNotExists("USER", 1, Set.of("NEWSLETTER_READ", "VIDEO_READ", "PRAYER_READ", "ATTENDANCE_READ" ,"MINISTRY_READ", "CONTACT_READ", "SERMON_READ", "EVENT_READ", "SERMONNOTE_READ"));
+        createRoleIfNotExists("USER", 1, Set.of("NEWSLETTER_READ", "VIDEO_READ", "PRAYER_READ", "ATTENDANCE_READ" ,"MINISTRY_READ", "CONTACT_READ", "SERMON_READ", "EVENT_READ", "SERMONNOTE_READ", "USER_READ"));
 
         // Crear rol ADMINISTRATOR con todos los permisos
         createRoleIfNotExists("ADMINISTRATOR", 4, Set.of(
                 "ADMIN_ACCESS"
+        ));
+        createRoleIfNotExists("LEADER", 2 ,Set.of(
+            "NEWSLETTER_READ", "VIDEO_READ", "PRAYER_READ", "ATTENDANCE_READ",
+            "MINISTRY_READ", "SERMON_READ", "EVENT_READ", "SERMONNOTE_READ", "USER_READ",
+            "CONTACT_READ", "MINISTRY_WRITE", "NEWSLETTER_EDIT", "MINISTRY_DELETE", "MINISTRY_ASSIGNATE"  // Permisos de MINISTRY
         ));
         // Crear cuenta de administrador si no existe
         String adminEmail = "admin@livingword.com";
@@ -94,6 +105,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEmail(adminEmail);
             admin.setVerified(true);
             admin.setGender("male");
+            admin.setPhone("987564321");
             admin.setLastname("Engage");
             admin.setPassword(passwordEncoder.encode("admin12345")); // **Cambiar a una contraseña segura**
             Role adminRole = roleService.getRoleByName("ADMINISTRATOR")

@@ -1,27 +1,24 @@
 package living.word.livingword.model.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class JwtResponse {
     private String token;
     private Long id;
     private String name;
+    private String lastname;
     private String email;
     private String role;
     private Set<String> permissions;
-    private String ministry; // Nuevo campo
+    private String ministry;
+    private String photoUrl;
 
-    public JwtResponse(String token, Long id, String name, String email, String role, Set<String> permissions, String ministry) {
-        this.token = token;
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-        this.permissions = permissions;
-        this.ministry = ministry;
-    }
 }

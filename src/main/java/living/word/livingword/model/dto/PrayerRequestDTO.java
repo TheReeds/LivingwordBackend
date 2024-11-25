@@ -12,5 +12,6 @@ public class PrayerRequestDTO {
     private String description;
     private LocalDateTime date;
     private int prayerCount;
-    private String username;  // Usuario que realizó el pedido de oración
+    private String username;
+    private String lastname;
 }

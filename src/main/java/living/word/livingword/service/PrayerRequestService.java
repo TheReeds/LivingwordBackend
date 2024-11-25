@@ -59,7 +59,8 @@ public class PrayerRequestService {
                 savedRequest.getDescription(),
                 savedRequest.getDate(),
                 savedRequest.getPrayerCount(),
-                user.getName()
+                user.getName(),
+                user.getLastname()
         );
     }
     // Get prayers for date
@@ -102,7 +103,9 @@ public class PrayerRequestService {
                 .orElseThrow(() -> new PrayerRequestNotFoundException("Prayer request with id " + requestId + " not found"));
 
         List<PrayerSupport> supports = prayerSupportRepository.findByPrayerRequest(prayerRequest);
-        return supports.stream().map(support -> support.getUser().getName()).collect(Collectors.toList());
+        return supports.stream()
+            .map(support -> support.getUser().getName() + " " + support.getUser().getLastname()) // Concatenamos el nombre y apellido
+            .collect(Collectors.toList());
     }
 
     @Transactional    // Delete a prayer request by your ID
@@ -143,7 +146,8 @@ public class PrayerRequestService {
                 prayerRequest.getDescription(),
                 prayerRequest.getDate(),
                 prayerRequest.getPrayerCount(),
-                prayerRequest.getUser().getName()
+                prayerRequest.getUser().getName(),
+                prayerRequest.getUser().getLastname()
         );
     }
 }

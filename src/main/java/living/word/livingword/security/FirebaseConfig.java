@@ -15,39 +15,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Configuration
 @Slf4j
 public class FirebaseConfig {
-    
-    @Value("${firebase.config.path}")
-    private String firebaseConfigPath;
-    
+
     @PostConstruct
     public void initialize() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
-                log.info("Cargando configuración de Firebase desde: {}", firebaseConfigPath);
+                log.info("Inicializando Firebase usando variable de entorno");
 
-                // Cargar archivo JSON de configuración
-                Resource resource = new ClassPathResource(firebaseConfigPath);
-                InputStream serviceAccount = resource.getInputStream();
+                // Leer el contenido del archivo JSON desde la variable de entorno
+                String firebaseConfig = System.getenv("FIREBASE_CONFIG");
+                if (firebaseConfig == null || firebaseConfig.isEmpty()) {
+                    throw new IllegalStateException("La variable de entorno FIREBASE_CONFIG no está configurada");
+                }
 
+                // Convertir el JSON en un flujo de entrada
+                ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseConfig.getBytes());
+
+                // Configurar Firebase
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .build();
 
                 FirebaseApp.initializeApp(options);
-                log.info("Firebase ha sido inicializado exitosamente");
+                log.info("Firebase ha sido inicializado exitosamente desde la variable de entorno");
             }
         } catch (IOException e) {
             log.error("Error al inicializar Firebase", e);
             throw new RuntimeException("No se pudo inicializar Firebase", e);
         }
     }
-
 
     @Bean
     public FirebaseMessaging firebaseMessaging() {

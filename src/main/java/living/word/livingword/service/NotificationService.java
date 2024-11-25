@@ -35,7 +35,7 @@ public class NotificationService {
     public void sendNewsletterNotification(Newsletter newsletter) {
         String title = "New newsletter available";
         String body = newsletter.getTitle();
-        String imageUrl = "https://marketing4ecommerce.net/wp-content/uploads/2016/01/marketing4ecommerce-241.jpg";
+        String imageUrl = "https://i.ibb.co/7jxkCRP/JOJO.png";
 
         Map<String, String> data = new HashMap<>();
         data.put("type", "newsletter");
@@ -114,23 +114,26 @@ public class NotificationService {
     }
 
     // Event notifications
-    /*public void sendEventNotification(Event event) {
-        String title = "Nuevo Evento";
-        String body = String.format("%s - %s", event.getTitle(), 
-                                  formatEventDateTime(event.getStartDateTime()));
-        
+    public void sendEventNotification(Event event) {
+        String title = "New Event: " + event.getTitle();  // Título del evento
+        String body = event.getDescription();  // Descripción del evento
+        String imageUrl = event.getImageUrl() != null && !event.getImageUrl().isEmpty() //imagen del evento
+        ? "http://localhost:6500/events/images/" + event.getImageUrl() 
+        : "https://www.shutterstock.com/image-vector/events-colorful-typography-banner-260nw-1356206768.jpg";
+    
         Map<String, String> data = new HashMap<>();
         data.put("type", "event");
         data.put("eventId", event.getId().toString());
-        data.put("action", "open_event");
-
+        data.put("action", "open_event");  // Acción para abrir el evento
+    
         try {
-            BatchResponse response = firebaseService.sendNotificationToAllUsers(title, body, data);
-            log.info("Event notification sent successfully");
+            BatchResponse response = firebaseService.sendNotificationToAllUsers(title, body, data, imageUrl);
+            log.info("Event notification sent successfully to {} recipients", 
+                     response != null ? response.getSuccessCount() : 0);
         } catch (Exception e) {
             log.error("Error sending event notification", e);
         }
-    }*/
+    }
 
     // Absence notifications to administrators
     /*public void notifyAdminAboutAbsence(User user, Sermon sermon) {

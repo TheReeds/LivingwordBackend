@@ -108,8 +108,8 @@ public class AuthController {
             // Obtén el nombre del ministerio si existe
             String ministry = (user.getMinistry() != null) ? user.getMinistry().getName() : null;
 
-            return ResponseEntity.ok(new JwtResponse(jwt, user.getId(), user.getName(), user.getEmail(),
-                    user.getRole().getName(), permissions, ministry));
+            return ResponseEntity.ok(new JwtResponse(jwt, user.getId(), user.getName(), user.getLastname(), user.getEmail(),
+                    user.getRole().getName(), permissions, ministry, user.getPhotoUrl()));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid credentials");
         } catch (Exception e) {
